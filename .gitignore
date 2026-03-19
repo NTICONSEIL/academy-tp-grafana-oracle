@@ -1,0 +1,51 @@
+# =============================================================
+# .gitignore — TP Grafana / Oracle 23ai
+# =============================================================
+
+# Variables d'environnement (contient les mots de passe)
+.env
+.env.local
+.env.*.local
+
+# Données générées volumineuses (recréées au premier démarrage)
+data_fictive_banc_test.sql
+
+# Volumes Docker (jamais commitables)
+oracle_data/
+grafana_data/
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Node (si scripts docx utilisés localement)
+node_modules/
+npm-debug.log*
+
+# Archives locales
+*.tar.gz
+*.zip

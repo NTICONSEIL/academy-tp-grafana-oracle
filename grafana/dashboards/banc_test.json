@@ -1,0 +1,94 @@
+{
+  "annotations": { "list": [] },
+  "description": "TP Grafana — Banc de Test Electronique (Oracle 23ai)",
+  "editable": true,
+  "graphTooltip": 1,
+  "id": null,
+  "panels": [
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 }, "id": 100, "title": "Vue d'ensemble", "type": "row" },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }, { "color": "green", "value": 80 }] } }, "overrides": [] },
+      "gridPos": { "h": 4, "w": 12, "x": 0, "y": 1 }, "id": 1,
+      "options": { "colorMode": "background", "graphMode": "none", "orientation": "horizontal", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": true }, "textMode": "auto" },
+      "title": "Volumes globaux", "type": "stat",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/volumes", "root_selector": "", "columns": [], "format": "table" }]
+    },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } }, "overrides": [{ "matcher": { "id": "byName", "options": "passed" }, "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }] }, { "matcher": { "id": "byName", "options": "failed" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] }] },
+      "gridPos": { "h": 4, "w": 12, "x": 12, "y": 1 }, "id": 4,
+      "options": { "displayLabels": ["percent"], "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] }, "pieType": "pie" },
+      "title": "Repartition sequences passed / failed", "type": "piechart",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/repartition?from=${__from:date:YYYY-MM-DD}&to=${__to:date:YYYY-MM-DD}", "root_selector": "", "columns": [{ "selector": "result", "text": "result", "type": "string" }, { "selector": "nb", "text": "nb", "type": "number" }], "format": "table" }]
+    },
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 }, "id": 101, "title": "Suivi qualite temporel", "type": "row" },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 15, "lineWidth": 2, "spanNulls": false }, "unit": "percent", "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 75 }, { "color": "green", "value": 90 }] } }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 6 }, "id": 2,
+      "options": { "legend": { "calcs": ["mean", "min", "max"], "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "multi" } },
+      "title": "Taux de reussite quotidien des sequences (%)", "type": "timeseries",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/qualite_quotidienne?from=${__from:date:YYYY-MM-DD}&to=${__to:date:YYYY-MM-DD}", "root_selector": "", "columns": [{ "selector": "jour", "text": "Time", "type": "timestamp" }, { "selector": "taux_passed_pct", "text": "Taux passed (%)", "type": "number" }], "format": "timeseries" }]
+    },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 10, "lineWidth": 2 }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 14 }, "id": 3,
+      "options": { "legend": { "calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "multi" } },
+      "title": "Taux d'echec par moyen de test (%)", "type": "timeseries",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/echec_par_moyen?from=${__from:date:YYYY-MM-DD}&to=${__to:date:YYYY-MM-DD}", "root_selector": "", "columns": [{ "selector": "jour", "text": "Time", "type": "timestamp" }, { "selector": "test_mean_id", "text": "Moyen", "type": "string" }, { "selector": "taux_failed_pct", "text": "Taux failed (%)", "type": "number" }], "format": "timeseries" }]
+    },
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 22 }, "id": 102, "title": "Performance des moyens de test", "type": "row" },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 85 }, { "color": "green", "value": 92 }] } }, "overrides": [{ "matcher": { "id": "byName", "options": "taux_pct" }, "properties": [{ "id": "custom.displayMode", "value": "color-background" }, { "id": "displayName", "value": "Taux reussite (%)" }] }] },
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 23 }, "id": 5,
+      "options": { "footer": { "show": false }, "showHeader": true },
+      "title": "Synthese par moyen de test", "type": "table",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/synthese_moyens", "root_selector": "", "columns": [], "format": "table" }]
+    },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" }, "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 85 }, { "color": "green", "value": 92 }] }, "unit": "percent" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 23 }, "id": 6,
+      "options": { "barRadius": 0.1, "groupWidth": 0.7, "legend": { "displayMode": "list", "placement": "bottom" }, "orientation": "horizontal", "showValue": "always" },
+      "title": "Taux de reussite par moyen", "type": "barchart",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/synthese_moyens", "root_selector": "", "columns": [{ "selector": "moyen", "text": "Moyen", "type": "string" }, { "selector": "taux_pct", "text": "Taux (%)", "type": "number" }], "format": "table" }]
+    },
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 31 }, "id": 103, "title": "Tendances et derive des valeurs", "type": "row" },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "custom": { "fillOpacity": 8, "lineWidth": 2, "spanNulls": true } }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 14, "x": 0, "y": 32 }, "id": 7,
+      "options": { "legend": { "calcs": ["mean", "min", "max"], "displayMode": "table", "placement": "bottom" }, "tooltip": { "mode": "multi" } },
+      "title": "Derive des valeurs RF", "type": "timeseries",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/derive_rf?from=${__from:date:YYYY-MM-DD}&to=${__to:date:YYYY-MM-DD}", "root_selector": "", "columns": [{ "selector": "jour", "text": "Time", "type": "timestamp" }, { "selector": "prod_id", "text": "Composant", "type": "string" }, { "selector": "valeur_moyenne", "text": "Valeur moy.", "type": "number" }], "format": "timeseries" }]
+    },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" }, "overrides": [] },
+      "gridPos": { "h": 8, "w": 10, "x": 14, "y": 32 }, "id": 8,
+      "options": { "bucketSize": "20", "combine": false, "fillOpacity": 80, "gradientMode": "none", "legend": { "displayMode": "list", "placement": "bottom" } },
+      "title": "Distribution des durees de mesure", "type": "histogram",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/durees?from=${__from:date:YYYY-MM-DD}&to=${__to:date:YYYY-MM-DD}", "root_selector": "", "columns": [{ "selector": "duree_sec", "text": "Duree (s)", "type": "number" }], "format": "table" }]
+    },
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 40 }, "id": 104, "title": "Non-conformites", "type": "row" },
+    {
+      "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" },
+      "fieldConfig": { "defaults": { "color": { "mode": "thresholds" } }, "overrides": [{ "matcher": { "id": "byName", "options": "type_ecart" }, "properties": [{ "id": "custom.displayMode", "value": "color-background" }, { "id": "mappings", "value": [{ "options": { "SOUS_MIN": { "color": "blue", "index": 0 }, "SUR_MAX": { "color": "red", "index": 1 } }, "type": "value" }] }] }] },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 41 }, "id": 9,
+      "options": { "footer": { "show": false }, "showHeader": true },
+      "title": "Mesures hors seuils (non-conformites)", "type": "table",
+      "targets": [{ "datasource": { "type": "yesoreyeram-infinity-datasource", "uid": "banctest_oracle" }, "refId": "A", "type": "json", "source": "url", "url": "http://bridge:8080/panels/non_conformites?from=${__from:date:YYYY-MM-DD}&to=${__to:date:YYYY-MM-DD}", "root_selector": "", "columns": [], "format": "table" }]
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 38,
+  "tags": ["oracle", "banc-test", "tp-grafana"],
+  "time": { "from": "2024-09-01T00:00:00.000Z", "to": "2025-03-01T23:59:59.000Z" },
+  "timezone": "Europe/Paris",
+  "title": "TP Grafana - Banc de Test Oracle 23ai",
+  "uid": "tp-banc-test-v1",
+  "version": 1
+}

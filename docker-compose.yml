@@ -1,0 +1,94 @@
+version: "3.9"
+
+# =============================================================
+# TP Grafana — Banc de Test Oracle 23ai
+# Christophe CROISANT / ntiConseil
+#
+# Services :
+#   oracle   — Oracle 23ai Free (port 1521)
+#   bridge   — API REST Python (port 8080) — proxy Oracle → JSON
+#   grafana  — Grafana OSS (port 3000)
+# =============================================================
+
+services:
+
+  # ── Oracle 23ai Free ────────────────────────────────────────
+  oracle:
+    image: gvenzl/oracle-free:23-slim
+    container_name: tp_oracle
+    restart: unless-stopped
+    environment:
+      ORACLE_PASSWORD:      ${ORACLE_SYS_PASSWORD:-Oracle23ai!}
+      APP_USER:             ${ORACLE_APP_USER:-banc_test}
+      APP_USER_PASSWORD:    ${ORACLE_APP_PASSWORD:-BancTest2025!}
+      ORACLE_DATABASE:      FREEPDB1
+    ports:
+      - "1521:1521"
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+      - ./oracle/init:/container-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 20s
+      retries: 10
+      start_period: 120s
+    networks:
+      - tp_net
+
+  # ── Bridge Oracle → REST/JSON ───────────────────────────────
+  bridge:
+    build:
+      context: ./bridge
+      dockerfile: Dockerfile
+    container_name: tp_bridge
+    restart: unless-stopped
+    environment:
+      ORACLE_HOST:      oracle
+      ORACLE_PORT:      1521
+      ORACLE_SERVICE:   FREEPDB1
+      ORACLE_USER:      ${ORACLE_APP_USER:-banc_test}
+      ORACLE_PASSWORD:  ${ORACLE_APP_PASSWORD:-BancTest2025!}
+      BRIDGE_PORT:      8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      oracle:
+        condition: service_healthy
+    networks:
+      - tp_net
+
+  # ── Grafana OSS ─────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana-oss:11.4.0
+    container_name: tp_grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER:     ${GF_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_ADMIN_PASSWORD:-Grafana2025!}
+      GF_INSTALL_PLUGINS:         yesoreyeram-infinity-datasource
+      GF_FEATURE_TOGGLES_ENABLE:  publicDashboards
+      GF_SERVER_ROOT_URL:         http://localhost:3000
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/dashboards/banc_test.json
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+    depends_on:
+      - bridge
+    networks:
+      - tp_net
+
+# ── Volumes ──────────────────────────────────────────────────
+volumes:
+  oracle_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+# ── Réseau ───────────────────────────────────────────────────
+networks:
+  tp_net:
+    driver: bridge

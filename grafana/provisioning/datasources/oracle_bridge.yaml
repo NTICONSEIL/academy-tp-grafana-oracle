@@ -1,0 +1,14 @@
+apiVersion: 1
+
+datasources:
+  - name: BancTest_Oracle
+    type: yesoreyeram-infinity-datasource
+    uid: banctest_oracle
+    access: proxy
+    isDefault: true
+    jsonData:
+      global_queries_enabled: true
+      auth_method: none
+    secureJsonData: {}
+    version: 1
+    editable: true
