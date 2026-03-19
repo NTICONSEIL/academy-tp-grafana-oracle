@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Dépendances système pour cx_Oracle / oracledb
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc libaio1 curl \
+    gcc libaio1t64 curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
