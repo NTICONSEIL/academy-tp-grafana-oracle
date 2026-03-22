@@ -1,8 +1,20 @@
+# TP : Supervision Oracle avec Grafana & Docker 📊
+
+> **Pôle : NTI Academy / NTI Digital**
+
+Ce projet est un module de formation conçu pour démontrer la mise en œuvre d'une chaîne d'observabilité complète sur une base de données Oracle.
+
+## 🎯 Objectifs Pédagogiques
+* Déploiement d'une infrastructure conteneurisée (Docker).
+* Configuration d'un exportateur de métriques pour Oracle DB.
+* Création de dashboards dynamiques sous Grafana pour le pilotage SI.
+
+## 🛠️ Stack Technique
+* **DB** : Oracle Database
+* **Monitoring** : Grafana & Prometheus
+* **Ops** : Docker / Docker-Compose
 # TP Grafana — Banc de Test Oracle 23ai
 ### Christophe CROISANT / ntiConseil
-
-Environnement Docker complet pour le TP de prise en main de Grafana
-sur une base de données Oracle 23ai simulant un banc de test électronique.
 
 ---
 
@@ -216,4 +228,4 @@ Si vous disposez d'une licence Grafana Enterprise ou d'un trial 30 jours :
 
 ---
 
-*ntiConseil — 2025*
+*ntiConseil — 2026*
